@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     private Vector2 _movementInput;
@@ -11,10 +11,8 @@ public class Player : MonoBehaviour
     private Vector2 _movementInputSmoothVelocity;
 
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _rotationSpeed;
     
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
@@ -22,7 +20,8 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         SetPlayerVelocity();
-        RotateInDirectionOfInput();
+        RotateInDirectionOfMouse();
+
     }
 
     private void SetPlayerVelocity()
@@ -31,14 +30,16 @@ public class Player : MonoBehaviour
         _rigidbody.velocity = _smoothedMovementInput * _moveSpeed;
     }
 
-    private void RotateInDirectionOfInput()
+    private void RotateInDirectionOfMouse()
     {
-        if(_movementInput != Vector2.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _smoothedMovementInput);
-            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 directionToMouse = mousePosition - transform.position;
 
-            _rigidbody.MoveRotation(rotation);
+        if (directionToMouse != Vector3.zero)
+        {
+            Vector2 direction = new Vector2(mousePosition.x - transform.position.x, mousePosition.y - transform.position.y);
+
+            transform.up = direction;
         }
     }
 
