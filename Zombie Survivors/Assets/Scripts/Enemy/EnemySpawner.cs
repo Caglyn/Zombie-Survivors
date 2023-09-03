@@ -6,14 +6,23 @@ public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private float _minSpawnTime;
     [SerializeField] private float _maxSpawnTime;
 
     private float _timeUntilSpawn;
 
+    private HealthController _healthController;
+
     void Awake()
     {
         SetTimeUntilSpawn();
+        _healthController = GameObject.Find("Player").GetComponent<HealthController>();
+
+        if(_healthController == null)
+        {
+            Debug.LogError("Health Controller in EnemySpawner is null!");
+        }
     }
 
     // Update is called once per frame
@@ -21,9 +30,14 @@ public class EnemySpawner : MonoBehaviour
     {
         _timeUntilSpawn -= Time.deltaTime;
         
-        if(_timeUntilSpawn <= 0)
+        if(_healthController.GetCurrentHealth() == 0)
         {
-            Instantiate(_enemyPrefab, transform.position, Quaternion.identity);
+            return;
+        }
+        else if(_timeUntilSpawn <= 0)
+        {
+            GameObject newEnemy = Instantiate(_enemyPrefab, transform.position, Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
             SetTimeUntilSpawn();
         }
     }
@@ -32,4 +46,5 @@ public class EnemySpawner : MonoBehaviour
     {
         _timeUntilSpawn = Random.Range(_minSpawnTime, _maxSpawnTime);
     }
+
 }

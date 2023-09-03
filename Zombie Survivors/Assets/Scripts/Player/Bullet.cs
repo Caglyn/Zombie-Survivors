@@ -20,7 +20,8 @@ public class Bullet : MonoBehaviour
     {
         if(other.GetComponent<EnemyMovement>())
         {
-            Destroy(other.gameObject);
+            HealthController healthController = other.GetComponent<HealthController>();
+            healthController.TakeDamage(10);
             Destroy(gameObject);
         }
     }

@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _smoothedMovementInput;
     private Vector2 _movementInputSmoothVelocity;
     private Camera _camera;
+    private Animator _animator;
 
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _screenBorder;
@@ -18,13 +19,14 @@ public class PlayerMovement : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _camera = Camera.main;
+        _animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
     {
         SetPlayerVelocity();
         RotateInDirectionOfMouse();
-
+        SetAnimation();
     }
 
     private void SetPlayerVelocity()
@@ -61,6 +63,12 @@ public class PlayerMovement : MonoBehaviour
 
             transform.up = direction;
         }
+    }
+
+    private void SetAnimation()
+    {
+        bool isMoving = _movementInput != Vector2.zero;
+        _animator.SetBool("IsMoving", isMoving);
     }
 
     private void OnMove(InputValue inputValue)

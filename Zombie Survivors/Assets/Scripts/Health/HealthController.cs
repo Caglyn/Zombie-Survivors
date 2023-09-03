@@ -64,4 +64,9 @@ public class HealthController : MonoBehaviour
             _currentHealth = _maximumHealth;
         }
     }
+
+    public float GetCurrentHealth()
+    {
+        return _currentHealth;
+    }
 }
