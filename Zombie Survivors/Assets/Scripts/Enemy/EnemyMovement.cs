@@ -33,7 +33,7 @@ public class EnemyMovement : MonoBehaviour
     {
         HandleRandomDirectionChange();
         HandlePlayerTargeting();
-        HnadleEnemyOffScreen();
+        HandleEnemyOffScreen();
     }
 
     private void HandleRandomDirectionChange()
@@ -58,7 +58,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private void HnadleEnemyOffScreen()
+    private void HandleEnemyOffScreen()
     {
         Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
 
